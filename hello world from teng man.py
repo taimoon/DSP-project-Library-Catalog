@@ -1,3 +1,5 @@
 print("hello world from teng man")
 print("hello hafiz")
+print("hello earth")
+print("hello earth")
 input()
