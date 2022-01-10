@@ -15,7 +15,7 @@ window.title("Library Catalogue")
 # filemenu.add_command(label="Borrow")
 # filemenu.add_command(label="Return")
 # filemenu.add_separator()
-# filemenu.add_command(label="Exit")
+# filemenu.add_command(label="Exithaha")
 
 window.geometry("1000x1000")
 
