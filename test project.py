@@ -1,24 +1,42 @@
-import tkinter as tk
-window=tk.Tk()
+from tkinter import *
+window=Tk()
 window.title("Library Catalogue")
-window.geometry("1000x1000")
-frame=tk.Frame(window)
-frame.place(relx=0.2,rely=0.2,relheight=0.6,relwidth=0.6)
+window.geometry(f"{720}x{480}")
 
-def page1():
-    label=tk.Label(frame,text='What book you want to borrow?')
-    label.place(relx=0.3,rely=0.4)
+def ShowFrame(currPage, newPage):
+    if currPage is not None:
+        currPage.destroy()
+    if callable(newPage):
+        newPage()
+def mainPage():
+    frame = LabelFrame(window, text='main', height=720, width=480,
+                       bd=3, relief='groove',
+                       padx=5, pady=5)
+    frame.grid()
+    bt = Button(frame, text='Borrow', command=lambda: ShowFrame(frame, borrowBookPage))
+    bt.grid(column=0, row=0)
+    bt = Button(frame, text='Return', command=lambda: ShowFrame(frame, returnBookPage))
+    bt.grid(row=1, column=0)
+def borrowBookPage():
+    frame = LabelFrame(window, text='borrow', height=720, width=480,
+                       bd=3, relief='groove',
+                       padx=5, pady=5)
+    frame.grid()
+    label=Label(frame,text='What book you want to borrow?')
+    label.grid(column=0,row=0)
+    Button(frame, text='back', command=lambda: ShowFrame(frame, mainPage)).grid(column=0,row=1)
+def returnBookPage():
+    frame = LabelFrame(window, text='return', height=720, width=480,
+                       bd=3, relief='groove',
+                       padx=5, pady=5)
+    frame.grid()
+    label=Label(frame,text='Return the book')
+    label.grid(column=0,row=0)
+    Button(frame, text='back', command=lambda: ShowFrame(frame, mainPage)).grid(column=0, row=1)
+if __name__ == '__main__':
+    mainPage()
+    window.mainloop()
 
-def page2():
-    label=tk.Label(frame,text='Return the book')
-    label.place(relx=0.3,rely=0.4)
-
-bt=tk.Button(window,text='Borrow',command=page1)
-bt.grid(column=0,row=0)
-bt1=tk.Button(window,text='Return',command=page2)
-bt1.grid(row=0,column=1)
-
-window.mainloop()
 
 
 
