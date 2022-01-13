@@ -2,3 +2,5 @@
 Group members:
 - Leong Teng Man (Leader)
 - Hafiz Asyraaf
+- Shafiq
+- Rosazwan
