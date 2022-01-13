@@ -141,7 +141,6 @@ def GetBookStatus(BookName = None, ISBN = None):
     book = SearchBook(BookName, ISBN)
     user = SearchUser(IC=book['IC'])
     return user['Name']
-
 def IsBookAvailable(BookName = None, ISBN = None):
     temp = SearchBook(BookName, ISBN)
     return temp['IC']=="LIBRARY_IC"
