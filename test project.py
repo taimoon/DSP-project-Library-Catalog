@@ -1,13 +1,10 @@
 from tkinter import *
-import pickle #save object into a file
+from Library_App_Engine import *
+from tkinter import messagebox
+
 window=Tk()
 window.title("Library Catalogue")
 window.geometry(f"{720}x{480}")
-LibraryDB = {
-    'User': [],
-    'Book': [],
-    'Book Status': []
-}
 def ShowFrame(CurrPage, NewPage):
     if CurrPage is not None:
         CurrPage.destroy()
@@ -55,8 +52,7 @@ def RegisterUserPage():
     NameLabel.grid(row=0,column=0);NameEntry.grid(row=0,column=1)
     ICLabel.grid(row=1, column=0);ICEntry.grid(row=1,column=1)
     def GetEntryInfo():
-        res = dict(name=NameEntry.get(), ic=ICEntry.get())
-        LibraryDB['User'].append(res)
+        AddUser(ICEntry.get(), NameEntry.get())
         ShowFrame(frame, MainPage)
     Button(frame, text='Register', command=GetEntryInfo).grid()
     Button(frame, text='back', command=lambda: ShowFrame(frame, MainPage)).grid()
@@ -77,42 +73,12 @@ def AddNewBook():
     ISBNLabel.grid(row=1, column=0)
     ISBNEntry.grid(row=1, column=1)
     def GetEntryInfo():
-        res = dict([
-            ("Book Name", BookNameEntry.get()),
-            ("ISBN", ISBNEntry.get())
-             ])
-        LibraryDB['Book'].append(res)
+        if AddBook(ISBNEntry.get(), BookNameEntry.get()) == False:
+            messagebox.showinfo(message="The Book is already registered in the library")
         ShowFrame(frame, MainPage)
     Button(frame, text='Add', command=GetEntryInfo).grid()
     Button(frame, text='back', command=lambda: ShowFrame(frame, MainPage)).grid()
-def FileLoad():
-    try:
-        f = open("Library Database.pickle", 'rb')
-        res = pickle.load(f)
-        f.close()
-        return res
-    except:
-        LibraryDB = {
-            'User': [],
-            'Book': []
-        }
-        FileSave(LibraryDB)
-        return LibraryDB
-def FileSave(LibraryDB):
-    f=open("Library Database.pickle", 'wb')
-    pickle.dump(LibraryDB, f, pickle.HIGHEST_PROTOCOL)
-    f.close()
 if __name__ == '__main__':
-    LibraryDB=FileLoad()
-    print(LibraryDB)
     MainPage()
     window.mainloop()
-    FileSave(LibraryDB)
-
-
-
-
-
-
-
-
+    print(GetBookStatus(ISBN='666666'))
