@@ -21,7 +21,7 @@ def MainPage():
     bt.grid(column=0, row=1)
     bt = Button(frame, text='Register New User', command=lambda: ShowFrame(frame, RegisterUserPage))
     bt.grid(column=0, row=2)
-    bt = Button(frame, text='Add New Book', command=lambda: ShowFrame(frame, AddNewBook))
+    bt = Button(frame, text='Add New Book', command=lambda: ShowFrame(frame, AddNewBookPage))
     bt.grid(column=0)
 def BorrowBookPage():
     frame = LabelFrame(window, text='borrow', height=720, width=480,
@@ -57,7 +57,7 @@ def RegisterUserPage():
         ShowFrame(frame, MainPage)
     Button(frame, text='Register', command=GetEntryInfo).grid()
     Button(frame, text='back', command=lambda: ShowFrame(frame, MainPage)).grid()
-def AddNewBook():
+def AddNewBookPage():
     FontStyle = ("Arial Narrow", 24)
     frame = LabelFrame(window, text='Registration', height=720, width=480,
                        bd=3, relief='groove',
@@ -82,4 +82,3 @@ def AddNewBook():
 if __name__ == '__main__':
     MainPage()
     window.mainloop()
-    print(GetBookStatus(ISBN='666666'))
