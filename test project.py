@@ -71,8 +71,6 @@ def RegisterUserPage():
     def GetEntryInfo():
         AddUser(ICEntry.get(), NameEntry.get())
         ShowFrame(frame, MainPage)
-    Button(frame, text='Register',bg='#d1ccc0', fg='black', command=GetEntryInfo).place(relx=0.28, rely=0.9, relwidth=0.18, relheight=0.08)
-    Button(frame, text='Back', command=lambda: ShowFrame(frame, MainPage)).place(relx=0.28, rely=0.98, relwidth=0.18, relheight=0.08)
 def AddNewBook():
     FontStyle = ("Arial Narrow", 24)
     frame = Frame(window, bg="#FFBB00", bd=5)
@@ -99,4 +97,3 @@ def AddNewBook():
 if __name__ == '__main__':
     MainPage()
     window.mainloop()
-    print(GetBookStatus(ISBN='666666'))
