@@ -1,4 +1,5 @@
 import sqlite3 as sql
+from datetime import date
 DBName = 'Library Database.db'
 def LibraryDBInit():
     con = sql.connect(DBName)
@@ -14,13 +15,30 @@ def LibraryDBInit():
     cursor.execute("""
         CREATE TABLE BOOK(
             ISBN            TEXT NOT NULL PRIMARY KEY,
-            Book_Name       TEXT,
+            BookName       TEXT,
+            BorrowingDate   TEXT,
             IC      TEXT DEFAULT  "LIBRARY_IC",
-            FOREIGN KEY(IC) REFERENCES USER(IC)
+            CONSTRAINT FK_IC FOREIGN KEY(IC) REFERENCES USER(IC)
+        )
+    """)
+    cursor.execute("""
+        CREATE TABLE BOOK_STATUS(
+            ISBN
         )
     """)
     con.commit()
     con.close()
+def LibraryAppInit():
+    import os
+    try:
+        os.remove('Library Database.db')
+        LibraryDBInit()
+        AddUser('001103140327', 'Leong Teng Man')
+        AddUser('010815990001', 'Hakurei Reimu')
+        AddBook('666666', '6 is the strongest number')
+        AddBook('666666666666', 'Tales of The Strongest Cirno')
+    except:
+        pass
 def ShowAllTable():
     con = sql.connect(DBName)
     cursor = con.cursor()
@@ -98,7 +116,7 @@ def AddBook(ISBN, Name):
     cursor = con.cursor()
     try:
         cursor.execute("""
-            INSERT INTO BOOK(ISBN, Book_Name) VALUES
+            INSERT INTO BOOK(ISBN, BookName) VALUES
             (?, ?);
         """, (ISBN, Name))
     except:
@@ -127,7 +145,7 @@ def SearchBook(BookName = None, ISBN = None):
     if BookName != None:
         cursor.execute(f"""
                     SELECT * FROM BOOK
-                    WHERE Book_Name LIKE \"{BookName}\"
+                    WHERE BookName LIKE \"{BookName}\"
                 """)
     elif ISBN != None:
         cursor.execute(f"""
@@ -144,3 +162,74 @@ def GetBookStatus(BookName = None, ISBN = None):
 def IsBookAvailable(BookName = None, ISBN = None):
     temp = SearchBook(BookName, ISBN)
     return temp['IC']=="LIBRARY_IC"
+def GetUserBorrowedBook(Name = None, IC = None):
+    user=SearchUser(Name, IC)
+    if not (user == None):
+        con = sql.connect(DBName)
+        cursor = con.cursor()
+        cursor.execute(f"""
+            SELECT ISBN, BookName, BorrowingDate FROM BOOK
+            WHERE IC like \"{user['IC']}\"
+        """)
+        res=CursorToDict(cursor)
+        con.close()
+        return res
+    return None
+def UpdateData(Table, CurrPK, PKName, NewInstance):
+    con = sql.connect(DBName)
+    cursor = con.cursor()
+    query = f"UPDATE {Table} SET "
+    for i in NewInstance:
+        query += f"{i} = "
+        if  isinstance(NewInstance[i], str) == True:
+            query += f"\"{NewInstance[i]}\""
+        else:
+            query += f"{NewInstance[i]}"
+        query +=", "
+    query=query[:-2:]
+    query+=f"WHERE {PKName} ="
+    if isinstance(NewInstance[PKName], str) == True:
+        query += f"\"{CurrPK}\""
+    else:
+        query += f"{CurrPK}"
+    cursor.execute(query)
+    con.commit()
+    con.close()
+def UpdateBook(CurrISBN, NewInstance):
+    UpdateData("BOOK", CurrISBN, "ISBN", NewInstance)
+def UpdateUser(CurrIC, NewInstance):
+    UpdateData("USER", CurrIC, "IC", NewInstance)
+def DeleteUser(IC):
+    con = sql.connect(DBName)
+    cursor = con.cursor()
+    cursor.execute(f"""
+            DELETE FROM USER
+            WHERE IC=\"{IC}\"
+        """)
+    con.commit()
+    con.close()
+def DeleteBook(ISBN):
+    con = sql.connect(DBName)
+    cursor = con.cursor()
+    cursor.execute(f"""
+            DELETE FROM BOOK
+            WHERE ISBN=\"{ISBN}\"
+        """)
+    con.commit()
+    con.close()
+def UpdateBook(ISBN, IC, Date=date.today()):
+    con = sql.connect(DBName)
+    con.execute("PRAGMA foreign_keys = 1")
+    cursor = con.cursor()
+    try:
+        cursor.execute(f"""
+            UPDATE BOOK 
+            SET IC = \"{IC}\",
+                BorrowingDate = \"{Date}\"
+            WHERE ISBN = \"{ISBN}\"
+        """)
+        con.commit()
+        con.close()
+        return True
+    except:
+        return False
