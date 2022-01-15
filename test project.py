@@ -28,9 +28,10 @@ def BorrowBookPage():
                        bd=3, relief='groove',
                        padx=5, pady=5)
     frame.grid()
-    label=Label(frame,text='What book you want to borrow?')
-    label.grid(column=0,row=0)
+    BookLabel=Label(frame,text='Book Name: ')
+    BookLabel.grid(column=0,row=0)
     Button(frame, text='back', command=lambda: ShowFrame(frame, MainPage)).grid(column=0,row=1)
+    Entry(frame).grid(row= 0, column=1)
 def ReturnBookPage():
     frame = LabelFrame(window, text='return', height=720, width=480,
                        bd=3, relief='groove',
