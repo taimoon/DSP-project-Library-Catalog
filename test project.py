@@ -9,8 +9,6 @@ window = Tk()
 window.title("Library Catalogue")
 window.geometry(f"{1000}x{1000}")
 window.config(bg='#afeeee')
-
-
 def ShowFrame(CurrPage, NewPage):
     if CurrPage is not None:
         CurrPage.destroy()
@@ -74,13 +72,13 @@ def MainPage(Criteria='BookName'):
     AddBookBtn = Button(frame, text='Add New Book', command=lambda: ShowFrame(frame, AddNewBook))
     #styling
     BookLiBox.config()
-    AddBookBtn.config(fg=fgColor, bg=bgColor, width=50,)
+    AddBookBtn.config(fg=fgColor, bg=bgColor, width=50)
     RegisterBtn.config(fg=fgColor, bg=bgColor, width=50)
-    BorrowBtn.config(bg="navajo white")
-    ReturnBtn.config(bg="navajo white")
-    EditBtn.config(bg="navajo white")
-    SearchBt.config(bg="navajo white")
-    ChgSearchBt.config(bg="navajo white")
+    BorrowBtn.config(fg=fgColor,bg=bgColor,width=50)
+    ReturnBtn.config(fg=fgColor,bg=bgColor,width=50)
+    EditBtn.config(fg=fgColor,bg=bgColor,width=50)
+    SearchBt.config(fg=fgColor,bg=bgColor,width=50)
+    ChgSearchBt.config(fg=fgColor,bg=bgColor,width=50)
     #positioning
     SearchLbl.grid(row=0)
     SearchEntry.grid(row=0, column=1)
@@ -164,7 +162,6 @@ def GetBookInfoFrame(parent, ISBNVar, BookNameVar, StatusVar):
     Label(frame, text="Status :").grid(row=2)
     Label(frame, textvariable=StatusVar).grid(row=2, column=1)
     return frame
-
 
 
 def ReturnBookPage(instance=None):
@@ -319,11 +316,8 @@ def AddNewBook(instance=None):
     BackBtn.grid()
     AddBtn.grid()
 
-
-
 def EditBookPage():
     MainPage()
-
 
 if __name__ == '__main__':
     LibraryAppInit()
