@@ -5,15 +5,8 @@ from tkinter import messagebox
 
 window=Tk()
 window.title("Library Catalogue")
-<<<<<<< HEAD
-window.geometry(f"{720}x{480}")
-window.resizable()
-=======
 window.geometry(f"{1000}x{1000}")
 window.config(bg='#afeeee')
-
->>>>>>> parent of fcc6258 (Revert "Merge pull request #10 from hafizsem/main")
-
 def ShowFrame(CurrPage, NewPage):
     if CurrPage is not None:
         CurrPage.destroy()
@@ -55,7 +48,6 @@ def BorrowBookPage():
     BookLabel.grid(column=0,row=0)
     IdLabel=Label(frame,text='Book ID: ',fg=fgColor,bg=bgColor,font=FontStyle)
     IdLabel.grid(column=0,row=1)
-<<<<<<< HEAD
     Button(frame, text='back', command=lambda: ShowFrame(frame, MainPage)).grid(column=0,row=4)
     Entry(frame).grid(row= 0, column=1)
     Entry(frame).grid(row=1, column=1)
@@ -93,11 +85,9 @@ def SearhBookPage(BookInsta):
     BookLiBox.grid(row=1)
     SearchBt.grid(row=2, column=1)
     Button(frame, text='Back', command= lambda: ShowFrame(frame, MainPage())).grid(row=2,column=0)
-=======
     Button(frame, text='Back',bg="navajo white", command=lambda: ShowFrame(frame, MainPage)).grid(column=1,row=4)
     Entry(frame).grid(row= 0, column=1,padx=30)
     Entry(frame).grid(row=1, column=1,padx=30)
->>>>>>> parent of fcc6258 (Revert "Merge pull request #10 from hafizsem/main")
 def ReturnBookPage():
     FontStyle = ("Arial Narrow", 21)
     fgColor = "midnight blue"
@@ -117,19 +107,9 @@ def ReturnBookPage():
     Entry(frame).grid(row=1, column=1,padx=50)
 
 def RegisterUserPage():
-<<<<<<< HEAD
-    FontStyle = ("Arial Narrow", 14)
-    frame = LabelFrame(window, text='Registration', height=720, width=480,
-                       bd=15, relief='groove',
-                       padx=5, pady=5)
-    frame.grid()
-    NameLabel = Label(frame, text="Name :", font=FontStyle)
-    ICLabel = Label(frame, text="IC No. :", font=FontStyle)
-=======
     FontStyle = ("Arial Narrow", 24)
     fgColor = "midnight blue"
     bgColor = "LightBlue1"
-
     frame = LabelFrame(window, text='REGISTRATION', height=1000, width=1000,
                        bd=10, relief='groove',
                        bg=bgColor, fg=fgColor, font= FontStyle )
@@ -137,7 +117,6 @@ def RegisterUserPage():
 
     NameLabel = Label(frame, text="Name :", fg=fgColor,bg=bgColor,font=FontStyle)
     ICLabel = Label(frame, text="IC No. :", fg=fgColor,bg=bgColor, font=FontStyle)
->>>>>>> parent of fcc6258 (Revert "Merge pull request #10 from hafizsem/main")
     NameEntry = Entry(frame, font=FontStyle)
     ICEntry = Entry(frame,font=FontStyle)
     NameLabel.grid(row=0,column=0);NameEntry.grid(row=0,column=1,padx=50)
@@ -148,13 +127,6 @@ def RegisterUserPage():
     Button(frame, text='Register',bg="navajo white",width=10, command=GetEntryInfo).grid(padx=50)
     Button(frame, text='Back',bg="navajo white",width=10, command=lambda: ShowFrame(frame, MainPage)).grid(padx=50)
 def AddNewBook():
-<<<<<<< HEAD
-    FontStyle = ("Arial Narrow", 14)
-    frame = LabelFrame(window, text='Registration', height=720, width=480,
-                       bd=15, relief='groove',
-                       padx=5, pady=5)
-    frame.grid()
-=======
     FontStyle = ("Arial Narrow", 21)
     fgColor = "midnight blue"
     bgColor = "LightBlue1"
@@ -163,7 +135,6 @@ def AddNewBook():
                        bd=10, relief='groove',
                        bg=bgColor, fg=fgColor, font=FontStyle)
     frame.grid(padx=400, pady=250)
->>>>>>> parent of fcc6258 (Revert "Merge pull request #10 from hafizsem/main")
     #initialise widgets
     BookNameLabel = Label(frame, text="Book Name :", fg=fgColor,bg=bgColor, font=FontStyle)
     ISBNLabel = Label(frame, text="International Standard Book Number (ISBN):", fg=fgColor,bg=bgColor, font=FontStyle)
