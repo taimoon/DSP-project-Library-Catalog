@@ -1,16 +1,20 @@
 import sqlite3 as sql
 from datetime import date
+
 DBName = 'Library Database.db'
+
+
 def LibraryDBInit():
     con = sql.connect(DBName)
     cursor = con.cursor()
     cursor.execute("""
         CREATE TABLE USER(
             IC      TEXT NOT NULL PRIMARY KEY,
-            Name    TEXT NOT NULL
+            Name    TEXT NOT NULL,
+            Privilege TEXT NOT NULL DEFAULT "Normal"
         )""")
     cursor.execute("""
-        INSERT INTO USER(IC, Name) VALUES ("LIBRARY_IC","LIBRARY")
+        INSERT INTO USER(IC, Name, Privilege) VALUES ("LIBRARY_IC","LIBRARY", "HIGHEST")
     """)
     cursor.execute("""
         CREATE TABLE BOOK(
@@ -18,22 +22,24 @@ def LibraryDBInit():
             BookName       TEXT,
             BorrowingDate   TEXT,
             IC      TEXT DEFAULT  "LIBRARY_IC",
+            Status  TEXT DEFAULT "NORMAL",
             CONSTRAINT FK_IC FOREIGN KEY(IC) REFERENCES USER(IC)
         )
     """)
     con.commit()
     con.close()
+
+
 def LibraryAppInit():
     import os
-    try:
-        os.remove('Library Database.db')
-        LibraryDBInit()
-        AddUser('001103140327', 'Leong Teng Man')
-        AddUser('010815990001', 'Hakurei Reimu')
-        AddBook('666666', '6 is the strongest number')
-        AddBook('666666666666', 'Tales of The Strongest Cirno')
-    except:
-        pass
+    os.remove('Library Database.db')
+    LibraryDBInit()
+    AddUser('001103140327', 'Leong Teng Man')
+    AddUser('010815990001', 'Hakurei Reimu')
+    AddBook('666666', '6 is the strongest number')
+    AddBook('666666666666', 'Tales of The Strongest Cirno', 'RESTRICTED')
+
+
 def ShowAllTable():
     con = sql.connect(DBName)
     cursor = con.cursor()
@@ -49,6 +55,8 @@ def ShowAllTable():
     for i in cursor:
         print(i)
     con.close()
+
+
 def TestDB():
     con = sql.connect(DBName)
     cursor = con.cursor()
@@ -63,14 +71,16 @@ def TestDB():
     for i in cursor:
         print(i)
     con.close()
+
+
 def CursorToDict(cursor):
-    res=[]
+    res = []
     for i in cursor:
-        resDict={}
-        FieldName=[elem[0] for elem in cursor.description]
-        idx=0
+        resDict = {}
+        FieldName = [elem[0] for elem in cursor.description]
+        idx = 0
         for j in i:
-            resDict[FieldName[idx]]=j
+            resDict[FieldName[idx]] = j
             idx = idx + 1
         res.append(resDict)
     if len(res) == 0:
@@ -79,6 +89,8 @@ def CursorToDict(cursor):
         return res[0]
     else:
         return res
+
+
 def PrintUserTable():
     con = sql.connect(DBName)
     cursor = con.cursor()
@@ -88,6 +100,8 @@ def PrintUserTable():
     for i in cursor:
         print(i)
     con.close()
+
+
 def PrintBookTable():
     con = sql.connect(DBName)
     cursor = con.cursor()
@@ -97,29 +111,41 @@ def PrintBookTable():
     for i in cursor:
         print(i)
     con.close()
-def AddUser(IC, Name):
+
+
+def AddUser(IC, Name, Privilege="Normal"):
     con = sql.connect(DBName)
     cursor = con.cursor()
     cursor.execute("""
-        INSERT INTO USER(IC, Name) VALUES
-        (?, ?);
-    """, (IC, Name))
+        INSERT INTO USER(IC, Name, Privilege) VALUES
+        (?, ?, ?);
+    """, (IC, Name, Privilege))
     con.commit()
     con.close()
-def AddBook(ISBN, Name):
+
+
+def AddBook(ISBN, Name, Status=None):
     con = sql.connect(DBName)
     cursor = con.cursor()
     try:
-        cursor.execute("""
-            INSERT INTO BOOK(ISBN, BookName) VALUES
-            (?, ?);
-        """, (ISBN, Name))
+        if Status is not None:
+            cursor.execute("""
+                            INSERT INTO BOOK(ISBN, BookName, Status) VALUES
+                            (?, ?, ?);
+            """, (ISBN, Name, Status))
+        else:
+            cursor.execute("""
+                INSERT INTO BOOK(ISBN, BookName) VALUES
+                (?, ?);
+            """, (ISBN, Name))
     except:
         return False
     con.commit()
     con.close()
-def SearchUser(Name = None, IC = None):
-    con=sql.connect(DBName)
+
+
+def SearchUser(Name=None, IC=None):
+    con = sql.connect(DBName)
     cursor = con.cursor()
     if Name != None:
         cursor.execute(f"""
@@ -134,8 +160,10 @@ def SearchUser(Name = None, IC = None):
     res = CursorToDict(cursor)
     con.close()
     return res
-def SearchBook(BookName = None, ISBN = None, ExactMatch = False, LIMIT = 5):
-    con=sql.connect(DBName)
+
+
+def SearchBook(BookName=None, ISBN=None, ExactMatch=False, LIMIT=5):
+    con = sql.connect(DBName)
     cursor = con.cursor()
     if ExactMatch == False:
         if BookName != None:
@@ -163,18 +191,39 @@ def SearchBook(BookName = None, ISBN = None, ExactMatch = False, LIMIT = 5):
                         WHERE ISBN LIKE '{ISBN}'
                         LIMIT {LIMIT}
                     """)
-    res=CursorToDict(cursor)
+    res = CursorToDict(cursor)
     con.close()
     return res
-def GetBookStatus(BookName = None, ISBN = None):
-    book = SearchBook(BookName, ISBN)
-    user = SearchUser(IC=book['IC'])
-    return user['Name']
-def IsBookAvailable(BookName = None, ISBN = None):
-    temp = SearchBook(BookName, ISBN)
-    return temp['IC']=="LIBRARY_IC"
-def GetUserBorrowedBook(Name = None, IC = None):
-    user=SearchUser(Name, IC)
+
+
+def GetBookCurrBorrower(BookName=None, ISBN=None):
+    book = SearchBook(BookName, ISBN, ExactMatch=True)
+    if book is not None:
+        user = SearchUser(IC=book['IC'])
+    if user is not None:
+        return user['Name']
+    return None
+
+
+def IsBookAvailable(BookName=None, ISBN=None):
+    temp = SearchBook(BookName, ISBN, ExactMatch=True)
+    if temp is None:
+        return False
+    return temp['IC'] == "LIBRARY_IC" and temp['Status'] != 'RESTRICTED'
+
+def GetBookStatus(BookName=None, ISBN=None):
+    temp = SearchBook(BookName, ISBN, ExactMatch=True)
+    if temp is None:
+        return "No record"
+    elif temp['Status'] == 'RESTRICTED':
+        return "Only Internal Reading"
+    elif temp['IC'] == "LIBRARY_IC":
+        return "Available for borrowing"
+    else:
+        return "No Available"
+
+def GetUserBorrowedBook(Name=None, IC=None):
+    user = SearchUser(Name, IC)
     if not (user == None):
         con = sql.connect(DBName)
         cursor = con.cursor()
@@ -182,23 +231,25 @@ def GetUserBorrowedBook(Name = None, IC = None):
             SELECT ISBN, BookName, BorrowingDate FROM BOOK
             WHERE IC like \"{user['IC']}\"
         """)
-        res=CursorToDict(cursor)
+        res = CursorToDict(cursor)
         con.close()
         return res
     return None
+
+
 def UpdateData(Table, CurrPK, PKName, NewInstance):
     con = sql.connect(DBName)
     cursor = con.cursor()
     query = f"UPDATE {Table} SET "
     for i in NewInstance:
         query += f"{i} = "
-        if  isinstance(NewInstance[i], str) == True:
+        if isinstance(NewInstance[i], str) == True:
             query += f"\"{NewInstance[i]}\""
         else:
             query += f"{NewInstance[i]}"
-        query +=", "
-    query=query[:-2:]
-    query+=f"WHERE {PKName} ="
+        query += ", "
+    query = query[:-2:]
+    query += f"WHERE {PKName} ="
     if isinstance(NewInstance[PKName], str) == True:
         query += f"\"{CurrPK}\""
     else:
@@ -206,10 +257,16 @@ def UpdateData(Table, CurrPK, PKName, NewInstance):
     cursor.execute(query)
     con.commit()
     con.close()
+
+
 def UpdateBook(CurrISBN, NewInstance):
     UpdateData("BOOK", CurrISBN, "ISBN", NewInstance)
+
+
 def UpdateUser(CurrIC, NewInstance):
     UpdateData("USER", CurrIC, "IC", NewInstance)
+
+
 def DeleteUser(IC):
     con = sql.connect(DBName)
     cursor = con.cursor()
@@ -219,6 +276,8 @@ def DeleteUser(IC):
         """)
     con.commit()
     con.close()
+
+
 def DeleteBook(ISBN):
     con = sql.connect(DBName)
     cursor = con.cursor()
@@ -228,6 +287,8 @@ def DeleteBook(ISBN):
         """)
     con.commit()
     con.close()
+
+
 def UpdateBook(ISBN, IC, Date=date.today()):
     con = sql.connect(DBName)
     con.execute("PRAGMA foreign_keys = 1")
