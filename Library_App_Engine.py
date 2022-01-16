@@ -11,6 +11,7 @@ def LibraryDBInit():
         CREATE TABLE USER(
             IC      TEXT NOT NULL PRIMARY KEY,
             Name    TEXT NOT NULL,
+            Email   TEXT,
             Privilege TEXT NOT NULL DEFAULT "Normal"
         )""")
     cursor.execute("""
@@ -22,7 +23,7 @@ def LibraryDBInit():
             BookName       TEXT,
             BorrowingDate   TEXT,
             IC      TEXT DEFAULT  "LIBRARY_IC",
-            Status  TEXT DEFAULT "NORMAL",
+            Status  TEXT DEFAULT "Normal",
             CONSTRAINT FK_IC FOREIGN KEY(IC) REFERENCES USER(IC)
         )
     """)
@@ -34,10 +35,10 @@ def LibraryAppInit():
     import os
     os.remove('Library Database.db')
     LibraryDBInit()
-    AddUser('001103140327', 'Leong Teng Man')
-    AddUser('010815990001', 'Hakurei Reimu')
+    AddUser('001103140327', 'Leong Teng Man', 'leongahman@gmail.com')
+    AddUser('010815990001', 'Hakurei Reimu', None)
     AddBook('666666', '6 is the strongest number')
-    AddBook('666666666666', 'Tales of The Strongest Cirno', 'RESTRICTED')
+    AddBook('666666666666', 'Tales of The Strongest Cirno', 'Restricted')
 
 
 def ShowAllTable():
@@ -113,13 +114,13 @@ def PrintBookTable():
     con.close()
 
 
-def AddUser(IC, Name, Privilege="Normal"):
+def AddUser(IC, Name, Email, Privilege="Normal"):
     con = sql.connect(DBName)
     cursor = con.cursor()
     cursor.execute("""
-        INSERT INTO USER(IC, Name, Privilege) VALUES
-        (?, ?, ?);
-    """, (IC, Name, Privilege))
+        INSERT INTO USER(IC, Name, Email, Privilege) VALUES
+        (?, ?, ?, ?);
+    """, (IC, Name, Email, Privilege))
     con.commit()
     con.close()
 
@@ -289,7 +290,7 @@ def DeleteBook(ISBN):
     con.close()
 
 
-def UpdateBook(ISBN, IC, Date=date.today()):
+def BorrowBook(ISBN, IC,  Date=date.today()):
     con = sql.connect(DBName)
     con.execute("PRAGMA foreign_keys = 1")
     cursor = con.cursor()
@@ -303,5 +304,10 @@ def UpdateBook(ISBN, IC, Date=date.today()):
         con.commit()
         con.close()
         return True
+    except sql.IntegrityError:
+        return "IC Error"
     except:
         return False
+
+def ReturnBook(ISBN):
+    return BorrowBook(ISBN,"LIBRARY_IC")
