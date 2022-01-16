@@ -6,7 +6,7 @@ from tkinter import messagebox
 window=Tk()
 window.title("Library Catalogue")
 window.geometry(f"{720}x{480}")
-
+window.resizable()
 
 def ShowFrame(CurrPage, NewPage):
     if CurrPage is not None:
@@ -28,6 +28,8 @@ def MainPage():
     bt.grid(column=0, row=2)
     bt = Button(frame, text='Add New Book', fg=fgColor,bg=bgColor,command=lambda: ShowFrame(frame, AddNewBook))
     bt.grid(column=0)
+    bt = Button(frame, text='Search Book', fg=fgColor, bg=bgColor, command=lambda: ShowFrame(frame, SearhBookPage))
+    bt.grid(column=0)
 def BorrowBookPage():
     frame = LabelFrame(window, text='borrow', height=720, width=480,
                        bd=15, relief='groove',
@@ -40,6 +42,40 @@ def BorrowBookPage():
     Button(frame, text='back', command=lambda: ShowFrame(frame, MainPage)).grid(column=0,row=4)
     Entry(frame).grid(row= 0, column=1)
     Entry(frame).grid(row=1, column=1)
+def GetBookInfoFrame(parent, instance):
+    frame = LabelFrame(parent)
+    Label(frame, text=f"ISBN :{instance['ISBN']}").grid(row=0)
+    Label(frame, text=f"Book Name:{instance['BookName']}").grid(row=1)
+    return frame
+def SearhBookPage(BookInsta):
+    frame = LabelFrame(window, text='main', height=720, width=480,
+                       bd=15, relief='groove',
+                       padx=5, pady=5)
+    frame.grid()
+    ISBNEntry = Entry(frame)
+    choicevar = StringVar(value=[])
+    def SearchBtCmd():
+        BookRes = SearchBook(ISBN=ISBNEntry.get())
+        temp = []
+        for i in BookRes:
+            temp.append(i['BookName'])
+        choicevar.set(temp)
+    SearchBt = Button(frame, text='Search', command=SearchBtCmd)
+    BookLiBox = Listbox(frame, height=5, listvariable=choicevar)
+    def BookLiBoxSel(BookInfoFrame=None):
+        idxs = BookLiBox.curselection()[0]
+        instance = SearchBook(BookName=BookLiBox.get(idxs), ExactMatch=True)
+        if BookInfoFrame != None:
+            BookInfoFrame.destroy()
+        BookInfoFrame = GetBookInfoFrame(frame, instance)
+        ShowFrame(frame, lambda : SearhBookPage(BookInfoFrame))
+    BookLiBox.bind('<<ListboxSelect>>', lambda *args: BookLiBoxSel(BookInfoFrame))
+
+    Label(frame, text="Enter the ISBN: ").grid(row=0)
+    ISBNEntry.grid(row=0, column=1)
+    BookLiBox.grid(row=1)
+    SearchBt.grid(row=2, column=1)
+    Button(frame, text='Back', command= lambda: ShowFrame(frame, MainPage())).grid(row=2,column=0)
 def ReturnBookPage():
     frame = LabelFrame(window, text='return', height=720, width=480,
                        bd=15, relief='groove',
@@ -53,7 +89,7 @@ def ReturnBookPage():
     Entry(frame).grid(row=0, column=1)
     Entry(frame).grid(row=1, column=1)
 def RegisterUserPage():
-    FontStyle = ("Arial Narrow", 24)
+    FontStyle = ("Arial Narrow", 14)
     frame = LabelFrame(window, text='Registration', height=720, width=480,
                        bd=15, relief='groove',
                        padx=5, pady=5)
@@ -70,7 +106,7 @@ def RegisterUserPage():
     Button(frame, text='Register', command=GetEntryInfo).grid()
     Button(frame, text='Back', command=lambda: ShowFrame(frame, MainPage)).grid()
 def AddNewBook():
-    FontStyle = ("Arial Narrow", 24)
+    FontStyle = ("Arial Narrow", 14)
     frame = LabelFrame(window, text='Registration', height=720, width=480,
                        bd=15, relief='groove',
                        padx=5, pady=5)
@@ -92,6 +128,6 @@ def AddNewBook():
     Button(frame, text='Add', command=GetEntryInfo).grid()
     Button(frame, text='back', command=lambda: ShowFrame(frame, MainPage)).grid()
 if __name__ == '__main__':
+    LibraryAppInit()
     MainPage()
     window.mainloop()
-    print(GetBookStatus(ISBN='666666'))
