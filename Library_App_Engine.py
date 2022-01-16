@@ -21,11 +21,6 @@ def LibraryDBInit():
             CONSTRAINT FK_IC FOREIGN KEY(IC) REFERENCES USER(IC)
         )
     """)
-    cursor.execute("""
-        CREATE TABLE BOOK_STATUS(
-            ISBN
-        )
-    """)
     con.commit()
     con.close()
 def LibraryAppInit():
@@ -139,19 +134,35 @@ def SearchUser(Name = None, IC = None):
     res = CursorToDict(cursor)
     con.close()
     return res
-def SearchBook(BookName = None, ISBN = None):
+def SearchBook(BookName = None, ISBN = None, ExactMatch = False, LIMIT = 5):
     con=sql.connect(DBName)
     cursor = con.cursor()
-    if BookName != None:
-        cursor.execute(f"""
-                    SELECT * FROM BOOK
-                    WHERE BookName LIKE \"{BookName}\"
-                """)
-    elif ISBN != None:
-        cursor.execute(f"""
-                    SELECT * FROM BOOK
-                    WHERE ISBN LIKE \"{ISBN}\"
-                """)
+    if ExactMatch == False:
+        if BookName != None:
+            cursor.execute(f"""
+                        SELECT * FROM BOOK
+                        WHERE BookName LIKE '%{BookName}%'
+                        LIMIT {LIMIT}
+                    """)
+        elif ISBN != None:
+            cursor.execute(f"""
+                        SELECT * FROM BOOK
+                        WHERE ISBN LIKE '%{ISBN}%'
+                        LIMIT {LIMIT}
+                    """)
+    else:
+        if BookName != None:
+            cursor.execute(f"""
+                        SELECT * FROM BOOK
+                        WHERE BookName LIKE '{BookName}'
+                        LIMIT {LIMIT}
+                    """)
+        elif ISBN != None:
+            cursor.execute(f"""
+                        SELECT * FROM BOOK
+                        WHERE ISBN LIKE '{ISBN}'
+                        LIMIT {LIMIT}
+                    """)
     res=CursorToDict(cursor)
     con.close()
     return res
