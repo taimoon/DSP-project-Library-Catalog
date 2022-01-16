@@ -56,7 +56,7 @@ def GetBookInfoFrame(parent, instance):
     Label(frame, text=f"ISBN :{instance['ISBN']}").grid(row=0)
     Label(frame, text=f"Book Name:{instance['BookName']}").grid(row=1)
     return frame
-def SearhBookPage(BookInsta):
+def SearhBookPage():
     frame = LabelFrame(window, text='main', height=720, width=480,
                        bd=15, relief='groove',
                        padx=5, pady=5)
