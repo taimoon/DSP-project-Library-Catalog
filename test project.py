@@ -20,6 +20,8 @@ def MainPage(Criteria='BookName'):
     FontStyle = ("halvetica", 21)
     fgColor = "midnight blue"
     bgColor = "LightBlue1"
+    PrintBookTable()
+    PrintUserTable()
     frame = LabelFrame(window, text='WELCOME TO LIBRARY CATALOGUE !!!!\n', height=1000, width=1000,
                        bd=10, relief='groove',
                        bg=bgColor, fg=fgColor, font=FontStyle)
@@ -74,7 +76,7 @@ def MainPage(Criteria='BookName'):
     AddBookBtn = Button(frame, text='Add New Book', command=lambda: ShowFrame(frame, AddNewBook))
     #styling
     BookLiBox.config()
-    AddBookBtn.config(fg=fgColor, bg=bgColor, width=50,)
+    AddBookBtn.config(fg=fgColor, bg=bgColor, width=50)
     RegisterBtn.config(fg=fgColor, bg=bgColor, width=50)
     BorrowBtn.config(bg="navajo white")
     ReturnBtn.config(bg="navajo white")
@@ -179,12 +181,13 @@ def ReturnBookPage(instance=None):
 
     BookNameLbl = Label(frame, text='Book Name:', fg=fgColor, bg=bgColor, font=FontStyle)
     ISBNLbl = Label(frame, text='ISBN:', fg=fgColor, bg=bgColor, font=FontStyle)
-    DateLbl = Label(frame, text="Date :")
+    DateLbl = Label(frame, text="Return Date :")
     ISBNSearchLbl = Label(frame, text='ISBN Search: ', fg=fgColor, bg=bgColor, font=FontStyle)
+    cal = Calendar(frame, selectmode='day',
+                   year=datetime.date.today().year, month=datetime.date.today().month,
+                   day=datetime.date.today().day)
     ISBNVar = StringVar()
     ISBNSearchEntry = Entry(frame)
-    ReturningDateEntry = Entry(frame)
-    ReturningDateEntry.insert(0, date.today())
     def ISBNSearch():
         BookRes = SearchBook(ISBN=ISBNSearchEntry.get(), ExactMatch=False)
         if type(BookRes) is list:
@@ -204,13 +207,11 @@ def ReturnBookPage(instance=None):
         else:
             BookRes = SearchBook(ISBN=ISBN, ExactMatch=True)
             BorrowingDate = datetime.datetime.strptime(BookRes['BorrowingDate'], '%Y-%m-%d')
-            ReturnDate = ReturningDateEntry.get()
-            ReturnDate = datetime.datetime.strptime(ReturnDate, '%Y-%m-%d')
+            ReturnDate = datetime.datetime.strptime(cal.get_date(),'%m/%d/%y')
             datediff =ReturnDate-BorrowingDate
             dayUnit = datetime.timedelta(days=1)
             if datediff> dayUnit*7:
-                messagebox.showinfo(message=f"""Overdue and the bill is sent to your registered email. 
-                If having no email, please immediately pay the fine.
+                messagebox.showinfo(message=f"""Overdue and please immediately pay the fine.
                 The fine amount: RM0.20*{int(datediff//dayUnit)}days = RM{datediff//dayUnit*0.2:.2f}
                 """)
             ReturnBook(ISBN)
@@ -218,13 +219,16 @@ def ReturnBookPage(instance=None):
             ShowFrame(frame, MainPage)
     ISBNSearchEntry.bind("<KeyPress>", lambda *args:ISBNSearch())
     if type(instance) is dict:
+        ISBNVar.set(value=instance['ISBN'])
+        BookNameLbl['text']=f"Book Name:{instance['BookName']}"
+        ISBNLbl['text']=f"ISBN :{instance['ISBN']}"
         ISBNSearchEntry.insert(0, instance['ISBN'])
     BookNameLbl.grid(column=0, row=0)
     ISBNLbl.grid(column=0, row=1)
     ISBNSearchLbl.grid(column=0, row=2)
     ISBNSearchEntry.grid(row=2, column=1)
     DateLbl.grid(row=3,column=0)
-    ReturningDateEntry.grid(row=3,column=1)
+    cal.grid(row=3,column=1)
     Button(frame, text='Back', bg="navajo white", command=lambda: ShowFrame(frame, MainPage)).grid(column=0)
     Button(frame, text='Return', bg="navajo white", command=Return).grid(column=1, row=4)
 
@@ -239,7 +243,14 @@ def RegisterUserPage():
     frame.grid(padx=400, pady=250)
 
     def GetEntryInfo():
-        AddUser(ICEntry.get(), NameEntry.get(), EmailEntry.get())
+        IC=ICEntry.get()
+        Name=NameEntry.get()
+        Email=EmailEntry.get()
+        if IC=='' or Name=='':
+            return
+        if Email == '':
+            Email=None
+        AddUser(IC, Name, Email)
         ShowFrame(frame, MainPage)
     RegBtn = Button(frame, text='Register', command=GetEntryInfo)
     BackBtn = Button(frame, text='Back', command=lambda: ShowFrame(frame, MainPage))
