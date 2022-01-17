@@ -210,13 +210,13 @@ def IsBookAvailable(BookName=None, ISBN=None):
     temp = SearchBook(BookName, ISBN, ExactMatch=True)
     if temp is None:
         return False
-    return temp['IC'] == "LIBRARY_IC" and temp['Status'] != 'RESTRICTED'
+    return temp['IC'] == "LIBRARY_IC" and temp['Status'] != 'Restricted'
 
 def GetBookStatus(BookName=None, ISBN=None):
     temp = SearchBook(BookName, ISBN, ExactMatch=True)
     if temp is None:
         return "No record"
-    elif temp['Status'] == 'RESTRICTED':
+    elif temp['Status'] == 'Restricted':
         return "Only Internal Reading"
     elif temp['IC'] == "LIBRARY_IC":
         return "Available for borrowing"
@@ -309,5 +309,6 @@ def BorrowBook(ISBN, IC,  Date=date.today()):
     except:
         return False
 
-def ReturnBook(ISBN):
+
+def ReturnBook(ISBN, Date=None):
     return BorrowBook(ISBN,"LIBRARY_IC")
