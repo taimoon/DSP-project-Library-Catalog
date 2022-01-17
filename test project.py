@@ -5,7 +5,7 @@ from Library_App_Engine import *
 
 window = Tk()
 window.title("Library Catalogue")
-window.geometry(f"{2000}x{1000}")
+window.geometry(f"{1000}x{1000}")
 window.config(bg='#afeeee')
 
 
