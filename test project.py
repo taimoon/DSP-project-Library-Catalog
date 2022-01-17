@@ -17,7 +17,7 @@ def ShowFrame(CurrPage, NewPage):
 
 
 def MainPage():
-    FontStyle = ("halvetica", 21)
+    FontStyle = ("halvetica", 21, "bold")
     fgColor = "midnight blue"
     bgColor = "LightBlue1"
 
@@ -48,11 +48,12 @@ def MainPage():
 
 def BorrowBookPage():
     FontStyle = ("Arial Narrow", 21)
+    FontStyle1 = ("halvetica", 21, "bold")
     fgColor = "midnight blue"
     bgColor = "LightBlue1"
     frame = LabelFrame(window, text='BORROW\n', height=1000, width=1000,
                        bd=10, relief='groove',
-                       bg=bgColor, fg=fgColor, font=FontStyle)
+                       bg=bgColor, fg=fgColor, font=FontStyle1)
     frame.grid(padx=400, pady=250)
     BookLabel = Label(frame, text='Book Name: ', fg=fgColor, bg=bgColor, font=FontStyle)
     IdLabel = Label(frame, text='Book ID: ', fg=fgColor, bg=bgColor, font=FontStyle)
@@ -77,12 +78,13 @@ def GetBookInfoFrame(parent, ISBNVar, BookNameVar, StatusVar):
 
 def SearhBookPage():
     FontStyle = ("Arial Narrow", 21)
+    FontStyle1 = ("halvetica", 21, "bold")
     fgColor = "midnight blue"
     bgColor = "LightBlue1"
 
     frame = LabelFrame(window, text='SEARCH BOOK\n', height=1000, width=1000,
                        bd=10, relief='groove',
-                       bg=bgColor, fg=fgColor, font=FontStyle)
+                       bg=bgColor, fg=fgColor, font=FontStyle1)
     frame.grid(padx=400, pady=250)
     BookChoiceVar = StringVar(value=[])
 
@@ -128,12 +130,13 @@ def SearhBookPage():
 
 def ReturnBookPage():
     FontStyle = ("Arial Narrow", 21)
+    FontStyle1 = ("halvetica", 21, "bold")
     fgColor = "midnight blue"
     bgColor = "LightBlue1"
 
     frame = LabelFrame(window, text='RETURN\n', height=1000, width=1000,
                        bd=10, relief='groove',
-                       bg=bgColor, fg=fgColor, font=FontStyle)
+                       bg=bgColor, fg=fgColor, font=FontStyle1)
     frame.grid(padx=400, pady=250)
 
     ReturnNamelabel = Label(frame, text='Book Name: ', fg=fgColor, bg=bgColor, font=FontStyle)
@@ -147,11 +150,12 @@ def ReturnBookPage():
 
 def RegisterUserPage():
     FontStyle = ("Arial Narrow", 24)
+    FontStyle1 = ("halvetica", 21, "bold")
     fgColor = "midnight blue"
     bgColor = "LightBlue1"
     frame = LabelFrame(window, text='REGISTRATION', height=1000, width=1000,
                        bd=10, relief='groove',
-                       bg=bgColor, fg=fgColor, font=FontStyle)
+                       bg=bgColor, fg=fgColor, font=FontStyle1)
     frame.grid(padx=400, pady=250)
 
     NameLabel = Label(frame, text="Name :", fg=fgColor, bg=bgColor, font=FontStyle)
@@ -175,11 +179,12 @@ def RegisterUserPage():
 
 def AddNewBook():
     FontStyle = ("Arial Narrow", 21)
+    FontStyle1 = ("halvetica", 21, "bold")
     fgColor = "midnight blue"
     bgColor = "LightBlue1"
     frame = LabelFrame(window, text='ADD NEW BOOK\n', height=1000, width=1000,
                        bd=10, relief='groove',
-                       bg=bgColor, fg=fgColor, font=FontStyle)
+                       bg=bgColor, fg=fgColor, font=FontStyle1)
     frame.grid(padx=400, pady=250)
     # initialise widgets
     BookNameLabel = Label(frame, text="Book Name :", fg=fgColor, bg=bgColor, font=FontStyle)
