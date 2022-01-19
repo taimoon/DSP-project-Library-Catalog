@@ -40,8 +40,8 @@ def MainPage(Criteria='BookName'):
     BookNameVar = StringVar(value="None")
     StatusVar = StringVar(value="None")
     BookInfoFrame = GetBookInfoFrame(frame, ISBNVar, BookNameVar, StatusVar)
-
     BookLiBox = Listbox(frame, height=5, listvariable=BookChoiceVar)
+
     def BookLiBoxSel(*args):
         idxs = BookLiBox.curselection()
         if len(idxs) < 1:
@@ -51,9 +51,10 @@ def MainPage(Criteria='BookName'):
         ISBNVar.set(instance['ISBN'])
         BookNameVar.set(instance['BookName'])
         StatusVar.set(GetBookStatus(ISBN=instance['ISBN']))
-    BookLiBox.bind('<<ListboxSelect>>', BookLiBoxSel)
+    BookLiBox.bind( '<<ListboxSelect>>',BookLiBoxSel )
     SearchLbl=Label(frame)
     ChgSearchBt = Button(frame, text='Change Search Criteria')
+
     if Criteria=='BookName':
         SearchLbl['text']="Enter the Book Name: "
         SearchBt['command']=lambda *args: SearchBtCmd(BookName=SearchEntry.get())
@@ -64,6 +65,7 @@ def MainPage(Criteria='BookName'):
         SearchBt['command']=lambda *args: SearchBtCmd(ISBN=SearchEntry.get())
         ChgSearchBt['command'] = lambda: ShowFrame(frame, MainPage('BookName'))
         SearchEntry.bind('<KeyPress>', lambda *args: SearchBtCmd(ISBN=SearchEntry.get()))
+
     #button frame
     def InstanceCtor():
         return SearchBook(ISBN=ISBNVar.get(), ExactMatch=True)
@@ -72,6 +74,8 @@ def MainPage(Criteria='BookName'):
     BorrowBtn = Button(frame, text='Borrow', command=lambda: ShowFrame(frame.destroy(), BorrowBookPage(ISBNVar.get(), BookNameVar.get())))
     RegisterBtn = Button(frame, text='Register New User', command=lambda: ShowFrame(frame, RegisterUserPage))
     AddBookBtn = Button(frame, text='Add New Book', command=lambda: ShowFrame(frame, AddNewBook))
+
+
     #styling
     FontStyle = ("Arial narrow", 21)
     FontStyle1 = ("halvetica", 21, "bold")
@@ -80,7 +84,7 @@ def MainPage(Criteria='BookName'):
     frame.config(height=1000, width=1000,bd=10, relief='groove',bg=bgColor, fg=fgColor, font=FontStyle1)
     SearchEntry.config(font=FontStyle)
     SearchLbl.config(font=FontStyle, bg=bgColor)
-    BookLiBox.config(relief='sunken',width=60)
+    BookLiBox.config(relief='sunken',width=55)
     BtnBgColor="#24d1bc"
     AddBookBtn.config(bg=BtnBgColor, width=20)
     RegisterBtn.config( bg=BtnBgColor, width=20)
@@ -89,6 +93,7 @@ def MainPage(Criteria='BookName'):
     ReturnBtn.config(bg=BtnBgColor,width=10)
     EditBtn.config(bg=BtnBgColor,width=10)
     SearchBt.config(bg=BtnBgColor,width=10)
+
     #positioning
     frame.grid(padx=400, pady=250)
     SearchLbl.grid(row=0)
@@ -107,8 +112,8 @@ def MainPage(Criteria='BookName'):
 def BorrowBookPage(ISBN=None, BookName=None):
     frame = LabelFrame(window, text='BORROW\n')
     frame.grid(padx=400, pady=250)
-    BookLabel = Label(frame, text='Book Name: ')
-    ISBNLbl = Label(frame, text='Book ID: ')
+    BookLabel = Label(frame, text='Book ID: ')
+    ISBNLbl = Label(frame, text='Book Name: ')
     BackBtn = Button(frame, text='Back', command=lambda: ShowFrame(frame, MainPage))
     ISBNEntry = Entry(frame)
     BookNameEntry = Entry(frame)
@@ -127,7 +132,7 @@ def BorrowBookPage(ISBN=None, BookName=None):
                     ShowFrame(frame, RegisterUserPage)
             else:
                 ShowFrame(frame, MainPage)
-    BorrowBtn = Button(frame, text='borrow', command=lambda: Borrow())
+    BorrowBtn = Button(frame, text='Borrow', command=lambda: Borrow())
 
     if ISBN != None:
         ISBNEntry.insert(0, ISBN)
@@ -141,15 +146,16 @@ def BorrowBookPage(ISBN=None, BookName=None):
     FontStyle1 = ("halvetica", 21, "bold")
     fgColor = "midnight blue"
     bgColor = "LightBlue1"
+    BtnBgColor="#24d1bc"
     frame.config(height=1000, width=1000,bd=10, relief='groove',bg=bgColor, fg=fgColor, font=FontStyle1)
-    ICLbl.config(font=FontStyle1, fg=fgColor, bg=bgColor)
+    ICLbl.config(fg=fgColor, bg=bgColor,font=FontStyle)
     BookLabel.config(fg=fgColor, bg=bgColor, font=FontStyle)
     ISBNLbl.config(fg=fgColor, bg=bgColor, font=FontStyle)
     ISBNEntry.config(font=FontStyle)
     BookNameEntry.config(fg=fgColor, bg=bgColor, font=FontStyle)
     BorrowerICEntry.config(font=FontStyle)
-    BorrowBtn.config()
-    BackBtn.config()
+    BorrowBtn.config(bg=BtnBgColor, width=10)
+    BackBtn.config(bg=BtnBgColor, width=10)
 
     BookLabel.grid(column=0, row=0)
     ISBNLbl.grid(column=0, row=1)
@@ -166,7 +172,6 @@ def BorrowBookPage(ISBN=None, BookName=None):
         messagebox.showinfo(message="The Book is not available for borrowing")
         ShowFrame(frame, MainPage)
 
-
 def GetBookInfoFrame(parent, ISBNVar, BookNameVar, StatusVar):
     frame = LabelFrame(parent)
     Label(frame, text="ISBN :").grid(row=0)
@@ -176,8 +181,6 @@ def GetBookInfoFrame(parent, ISBNVar, BookNameVar, StatusVar):
     Label(frame, text="Status :").grid(row=2)
     Label(frame, textvariable=StatusVar).grid(row=2, column=1)
     return frame
-
-
 
 def ReturnBookPage(instance=None):
     FontStyle = ("Arial Narrow", 21)
@@ -283,7 +286,6 @@ def RegisterUserPage():
     ICEntry.grid(row=1, column=1, padx=50)
     EmailLabel.grid(row=2, column=0)
     EmailEntry.grid(row=2,column=1)
-
     RegBtn.grid(row=3, column=1, padx=50)
     BackBtn.grid(row=3, column=0)
 
@@ -343,14 +345,11 @@ def AddNewBook(instance=None):
     BackBtn.grid()
     AddBtn.grid()
 
-
-
 def EditBookPage(instance=None):
     if instance is None:
         MainPage()
     else:
         AddNewBook(instance)
-
 
 if __name__ == '__main__':
     LibraryAppInit()
