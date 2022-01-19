@@ -2,8 +2,6 @@ import sqlite3 as sql
 from datetime import date
 
 DBName = 'Library Database.db'
-
-
 def LibraryDBInit():
     con = sql.connect(DBName)
     cursor = con.cursor()
