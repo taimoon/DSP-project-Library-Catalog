@@ -85,6 +85,8 @@ def MainPage(Criteria='BookName'):
     SearchEntry.config(font=FontStyle)
     SearchLbl.config(font=FontStyle, bg=bgColor)
     BookLiBox.config(relief='sunken',width=55)
+
+    #button styling
     BtnBgColor="#24d1bc"
     AddBookBtn.config(bg=BtnBgColor, width=20)
     RegisterBtn.config( bg=BtnBgColor, width=20)
@@ -141,6 +143,7 @@ def BorrowBookPage(ISBN=None, BookName=None):
     ISBNEntry['state'] = "readonly"
     BookNameEntry['state'] = "readonly"
     ICLbl = Label(frame, text="IC: ")
+
     #styling
     FontStyle = ("Arial Narrow", 21)
     FontStyle1 = ("halvetica", 21, "bold")
@@ -152,11 +155,12 @@ def BorrowBookPage(ISBN=None, BookName=None):
     BookLabel.config(fg=fgColor, bg=bgColor, font=FontStyle)
     ISBNLbl.config(fg=fgColor, bg=bgColor, font=FontStyle)
     ISBNEntry.config(font=FontStyle)
-    BookNameEntry.config(fg=fgColor, bg=bgColor, font=FontStyle)
+    BookNameEntry.config(fg=fgColor, font=FontStyle)
     BorrowerICEntry.config(font=FontStyle)
     BorrowBtn.config(bg=BtnBgColor, width=10)
     BackBtn.config(bg=BtnBgColor, width=10)
 
+    #postioning
     BookLabel.grid(column=0, row=0)
     ISBNLbl.grid(column=0, row=1)
     ISBNEntry.grid(row=0, column=1, padx=5, pady=5)
@@ -195,7 +199,7 @@ def ReturnBookPage(instance=None):
 
     BookNameLbl = Label(frame, text='Book Name:', fg=fgColor, bg=bgColor, font=FontStyle)
     ISBNLbl = Label(frame, text='ISBN:', fg=fgColor, bg=bgColor, font=FontStyle)
-    DateLbl = Label(frame, text="Return Date :", bg=bgColor, font=FontStyle)
+    DateLbl = Label(frame, text=" Return Date :", bg=bgColor, font=FontStyle)
     ISBNSearchLbl = Label(frame, text='ISBN Search: ', fg=fgColor, bg=bgColor, font=FontStyle)
     cal = Calendar(frame, selectmode='day',
                    year=datetime.date.today().year, month=datetime.date.today().month,
@@ -206,8 +210,8 @@ def ReturnBookPage(instance=None):
         BookRes = SearchBook(ISBN=ISBNSearchEntry.get(), ExactMatch=False)
         if type(BookRes) is list:
             for i in BookRes:
-                BookNameLbl['text'] = f"Book Name: {i['BookName']}"
-                ISBNLbl['text']= f"Book Name: {i['ISBN']}"
+                BookNameLbl['text'] = f"Book Name:\t{i['BookName']}"
+                ISBNLbl['text']= f"Book Name:\t{i['ISBN']}"
                 ISBNVar.set(value=i['ISBN'])
                 break
         elif type(BookRes) is dict:
@@ -234,18 +238,17 @@ def ReturnBookPage(instance=None):
     ISBNSearchEntry.bind("<KeyPress>", lambda *args:ISBNSearch())
     if type(instance) is dict:
         ISBNVar.set(value=instance['ISBN'])
-        BookNameLbl['text']=f"Book Name:{instance['BookName']}"
-        ISBNLbl['text']=f"ISBN :{instance['ISBN']}"
+        BookNameLbl['text']=f"Book Name: {instance['BookName']}"
+        ISBNLbl['text']=f"ISBN: {instance['ISBN']}"
         ISBNSearchEntry.insert(0, instance['ISBN'])
     BookNameLbl.grid(column=0, row=0)
     ISBNLbl.grid(column=0, row=1)
     ISBNSearchLbl.grid(column=0, row=2)
-    ISBNSearchEntry.grid(row=2, column=1, padx=5)
+    ISBNSearchEntry.grid(row=2, column=1, padx=25)
     DateLbl.grid(row=3,column=0)
-    cal.grid(row=3,column=1)
-    Button(frame, text='Back', bg="#24d1bc", command=lambda: ShowFrame(frame, MainPage)).grid(column=0)
-    Button(frame, text='Return', bg="#24d1bc", command=Return).grid(column=1, row=4)
-
+    cal.grid(row=3,column=1, padx=20, pady=4)
+    Button(frame, text='Back', bg="#24d1bc",width=10, command=lambda: ShowFrame(frame, MainPage)).grid(column=0)
+    Button(frame, text='Return', bg="#24d1bc", width=10, command=Return).grid(column=1, row=4)
 
 def RegisterUserPage():
     FontStyle = ("Arial Narrow", 24)
