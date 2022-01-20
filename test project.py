@@ -9,8 +9,9 @@ from tkcalendar import Calendar
 window = Tk()
 window.title("Library Catalogue")
 window.geometry(f"{2000}x{1000}")
-window.config(bg="LightBlue1")
-
+bgPhoto=PhotoImage(file="C:\\Users\\Hafiz Asyraaf\\Downloads\\library.png")
+my_label=Label(window, image=bgPhoto)
+my_label.place(x=0, y=0)
 
 def ShowFrame(CurrPage, NewPage):
     if CurrPage is not None:
@@ -81,7 +82,7 @@ def MainPage(Criteria='BookName'):
     FontStyle1 = ("halvetica", 21, "bold")
     fgColor = "midnight blue"
     bgColor = "LightBlue1"
-    frame.config(height=1000, width=1000,bd=10, relief='groove',bg=bgColor, fg=fgColor, font=FontStyle1)
+    frame.config(height=1000, width=1000,bd=10, relief='groove',bg="#FFB067", fg=fgColor, font=FontStyle1)
     SearchEntry.config(font=FontStyle)
     SearchLbl.config(font=FontStyle, bg=bgColor)
     BookLiBox.config(relief='sunken',width=55)
