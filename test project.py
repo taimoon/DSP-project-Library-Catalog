@@ -9,7 +9,7 @@ from tkcalendar import Calendar
 window = Tk()
 window.title("Library Catalogue")
 window.geometry(f"{2000}x{1000}")
-bgPhoto=PhotoImage(file="C:\\Users\\Hafiz Asyraaf\\Downloads\\library.png")
+bgPhoto=PhotoImage(file="C:\\Users\\Hafiz Asyraaf\\OneDrive\\Documents\\GitHub\\DSP-project-Library-Catalog\\library.png")
 my_label=Label(window, image=bgPhoto)
 my_label.place(x=0, y=0)
 
@@ -22,8 +22,7 @@ def ShowFrame(CurrPage, NewPage):
 def MainPage(Criteria='BookName'):
     PrintBookTable()
     PrintUserTable()
-    frame = LabelFrame(window, text='WELCOME TO LIBRARY CATALOGUE !!!!\n')
-
+    frame = LabelFrame(window, text='~~~~WELCOME TO LIBRARY CATALOGUE~~~~\n')
     BookChoiceVar = StringVar(value=[])
     def SearchBtCmd(ISBN=None, BookName=None):
         BookRes = SearchBook(ISBN=ISBN, BookName=BookName)
@@ -81,14 +80,14 @@ def MainPage(Criteria='BookName'):
     FontStyle = ("Arial narrow", 21)
     FontStyle1 = ("halvetica", 21, "bold")
     fgColor = "midnight blue"
-    bgColor = "LightBlue1"
-    frame.config(height=1000, width=1000,bd=10, relief='groove',bg="#FFB067", fg=fgColor, font=FontStyle1)
+    bgColor = "#FFB067"
+    frame.config(height=1000, width=1000,bd=10, relief='groove',bg=bgColor, fg="black", font=FontStyle1)
     SearchEntry.config(font=FontStyle)
     SearchLbl.config(font=FontStyle, bg=bgColor)
     BookLiBox.config(relief='sunken',width=55)
 
     #button styling
-    BtnBgColor="#24d1bc"
+    BtnBgColor="#FF8300"
     AddBookBtn.config(bg=BtnBgColor, width=20)
     RegisterBtn.config( bg=BtnBgColor, width=20)
     ChgSearchBt.config(bg=BtnBgColor, width=20)
@@ -148,9 +147,9 @@ def BorrowBookPage(ISBN=None, BookName=None):
     #styling
     FontStyle = ("Arial Narrow", 21)
     FontStyle1 = ("halvetica", 21, "bold")
-    fgColor = "midnight blue"
-    bgColor = "LightBlue1"
-    BtnBgColor="#24d1bc"
+    fgColor = "black"
+    bgColor = "#FFB067"
+    BtnBgColor="#FF8300"
     frame.config(height=1000, width=1000,bd=10, relief='groove',bg=bgColor, fg=fgColor, font=FontStyle1)
     ICLbl.config(fg=fgColor, bg=bgColor,font=FontStyle)
     BookLabel.config(fg=fgColor, bg=bgColor, font=FontStyle)
@@ -190,8 +189,8 @@ def GetBookInfoFrame(parent, ISBNVar, BookNameVar, StatusVar):
 def ReturnBookPage(instance=None):
     FontStyle = ("Arial Narrow", 21)
     FontStyle1 = ("halvetica", 21, "bold")
-    fgColor = "midnight blue"
-    bgColor = "LightBlue1"
+    fgColor = "black"
+    bgColor = "#FFB067"
 
     frame = LabelFrame(window, text='RETURN\n', height=1000, width=1000,
                        bd=10, relief='groove',
@@ -248,14 +247,14 @@ def ReturnBookPage(instance=None):
     ISBNSearchEntry.grid(row=2, column=1, padx=25)
     DateLbl.grid(row=3,column=0)
     cal.grid(row=3,column=1, padx=20, pady=4)
-    Button(frame, text='Back', bg="#24d1bc",width=10, command=lambda: ShowFrame(frame, MainPage)).grid(column=0)
-    Button(frame, text='Return', bg="#24d1bc", width=10, command=Return).grid(column=1, row=4)
+    Button(frame, text='Back', bg="#FF8300",width=10, command=lambda: ShowFrame(frame, MainPage)).grid(column=0)
+    Button(frame, text='Return', bg="#FF8300", width=10, command=Return).grid(column=1, row=4)
 
 def RegisterUserPage():
     FontStyle = ("Arial Narrow", 24)
     FontStyle1 = ("halvetica", 21, "bold")
-    fgColor = "midnight blue"
-    bgColor = "LightBlue1"
+    fgColor = "black"
+    bgColor = "#FFB067"
     frame = LabelFrame(window, text='REGISTRATION', height=1000, width=1000,
                        bd=10, relief='groove',
                        bg=bgColor, fg=fgColor, font=FontStyle1)
@@ -274,14 +273,14 @@ def RegisterUserPage():
     RegBtn = Button(frame, text='Register',bg=bgColor, command=GetEntryInfo)
     BackBtn = Button(frame, text='Back', command=lambda: ShowFrame(frame, MainPage))
 
-    RegBtn.config(bg="#24d1bc", width=10)
+    RegBtn.config(bg="#FF8300", width=10)
     NameLabel = Label(frame, text="Name :", fg=fgColor, bg=bgColor, font=FontStyle)
     ICLabel = Label(frame, text="IC No. :", fg=fgColor, bg=bgColor, font=FontStyle)
     EmailLabel = Label(frame, text="Email :", fg=fgColor, bg=bgColor, font=FontStyle)
     NameEntry = Entry(frame, font=FontStyle)
     ICEntry = Entry(frame, font=FontStyle)
     EmailEntry = Entry(frame, font=FontStyle)
-    BackBtn.config(bg="#24d1bc", width=10)
+    BackBtn.config(bg="#FF8300", width=10)
 
     #positioning
     NameLabel.grid(row=0, column=0)
@@ -297,8 +296,8 @@ def RegisterUserPage():
 def AddNewBook(instance=None):
     FontStyle = ("Arial Narrow", 21)
     FontStyle1 = ("halvetica", 21, "bold")
-    fgColor = "midnight blue"
-    bgColor = "LightBlue1"
+    fgColor = "black"
+    bgColor = "#FFB067"
     frame = LabelFrame(window, text='ADD NEW BOOK\n', height=1000, width=1000,
                        bd=10, relief='groove',
                        bg=bgColor, fg=fgColor, font=FontStyle1)
@@ -312,7 +311,7 @@ def AddNewBook(instance=None):
     ISBNEntry = Entry(frame)
     StatusBox = ttk.Combobox(frame, values=('Normal', 'Restricted'))
     StatusBox.state(["readonly"])
-    BackBtn = Button(frame, text='Back',bg="#24d1bc", command=lambda: ShowFrame(frame, MainPage))
+    BackBtn = Button(frame, text='Back',bg="#FF8300", command=lambda: ShowFrame(frame, MainPage))
 
     def GetEntryInfo():
         ISBN = ISBNEntry.get()
@@ -334,8 +333,8 @@ def AddNewBook(instance=None):
         AddBtn['text'] = "Edit"
 
     #styling the widgets
-    AddBtn.config(bg="#24d1bc", width=10)
-    BackBtn.config(bg="#24d1bc", width=10)
+    AddBtn.config(bg="#FF8300", width=10)
+    BackBtn.config(bg="#FF8300", width=10)
     BookNameLabel.config(fg=fgColor, bg=bgColor, font=FontStyle)
     ISBNLabel.config(fg=fgColor, bg=bgColor, font=FontStyle)
     BookNameEntry.config(font=FontStyle)
