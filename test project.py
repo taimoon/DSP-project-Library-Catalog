@@ -22,7 +22,7 @@ def ShowFrame(CurrPage, NewPage):
 def MainPage(Criteria='BookName'):
     PrintBookTable()
     PrintUserTable()
-    frame = LabelFrame(window, text='~~~~WELCOME TO LIBRARY CATALOGUE~~~~\n')
+    frame = LabelFrame(window, text='WELCOME TO LIBRARY CATALOGUE\n')
     BookChoiceVar = StringVar(value=[])
     def SearchBtCmd(ISBN=None, BookName=None):
         BookRes = SearchBook(ISBN=ISBN, BookName=BookName)
