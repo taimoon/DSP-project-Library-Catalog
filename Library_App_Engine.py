@@ -45,7 +45,7 @@ def LibraryAppInit():
     AddUser('010814062399', 'Aizat Amirul Bin Zakir', 'Aizatte34@gmail.com')
     AddUser('099319044380', 'Aezul Bin Mat Zin', 'Aus695@gmail.com')
     AddUser('010709637876', 'Aiman Nabilah Binti Said', 'Aizatte34@gmail.com')
-    AddBook('9781603090254', 'Alec: The Years Have Pants,', 'Available')
+    AddBook('9781603090254', 'Alec: The Years Have Pants', 'Available')
     AddBook('9781603094955', 'Better Place', 'Available')
     AddBook('1735322342', 'Dont Close Your Eyes', 'Available')
     AddBook('0346148936', 'Complicated Moonlight', 'Available')
