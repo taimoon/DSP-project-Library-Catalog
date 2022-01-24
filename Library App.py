@@ -8,8 +8,12 @@ from tkcalendar import Calendar
 
 window = Tk()
 window.title("Library Catalogue")
-window.geometry(f"{2000}x{1000}")
+#window.geometry(f"{2000}x{1000}")
+window.resizable(1,1)
+window.columnconfigure(0, weight=1)
+window.rowconfigure(0, weight=1)
 window.config(bg="LightBlue1")
+
 
 
 def ShowFrame(CurrPage, NewPage):
@@ -17,6 +21,7 @@ def ShowFrame(CurrPage, NewPage):
         CurrPage.destroy()
     if callable(NewPage):
         NewPage()
+
 
 def MainPage(Criteria='BookName'):
     PrintBookTable()
@@ -95,7 +100,9 @@ def MainPage(Criteria='BookName'):
     SearchBt.config(bg=BtnBgColor,width=10)
 
     #positioning
-    frame.grid(padx=400, pady=250)
+    frame.grid()
+    frame.grid_columnconfigure(0, weight=1)
+    frame.grid_rowconfigure(0, weight=1)
     SearchLbl.grid(row=0)
     SearchEntry.grid(row=0, column=1, padx=5)
     BookLiBox.grid(row=1)
