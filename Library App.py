@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
-from tkinter import ttk #to use the comboboxafsd
+from tkinter import ttk #to use the combobox
 import datetime as datetime
 from Library_App_Engine import *
 from tkcalendar import Calendar
@@ -8,8 +8,11 @@ from tkcalendar import Calendar
 
 window = Tk()
 window.title("Library Catalogue")
-window.geometry(f"{2000}x{1000}")
-bgPhoto=PhotoImage(file="C:\\Users\\Hafiz Asyraaf\\OneDrive\\Documents\\GitHub\\DSP-project-Library-Catalog\\library.png")
+window.geometry(f"{720}x{480}")
+window.resizable(1,1)
+window.columnconfigure(0, weight=1)
+window.rowconfigure(0, weight=1)
+bgPhoto=PhotoImage(file="library.png")
 my_label=Label(window, image=bgPhoto)
 my_label.place(x=0, y=0)
 
@@ -19,8 +22,18 @@ def ShowFrame(CurrPage, NewPage):
     if callable(NewPage):
         NewPage()
 
+def AutoResizeConfig(frame):
+    for col in range(0,frame.grid_size()[0]):
+        frame.columnconfigure(col, weight = 1)
+    for row in range(0, frame.grid_size()[1]):
+        frame.columnconfigure(row, weight=1)
+    return frame
+
+
 def MainPage(Criteria='BookName'):
+    print("---Book List---")
     PrintBookTable()
+    print("---User List---")
     PrintUserTable()
     frame = LabelFrame(window, text='WELCOME TO LIBRARY CATALOGUE\n')
     BookChoiceVar = StringVar(value=[])
@@ -58,12 +71,12 @@ def MainPage(Criteria='BookName'):
     if Criteria=='BookName':
         SearchLbl['text']="Enter the Book Name: "
         SearchBt['command']=lambda *args: SearchBtCmd(BookName=SearchEntry.get())
-        ChgSearchBt['command']=lambda: ShowFrame(frame, MainPage('ISBN'))
+        ChgSearchBt['command']=lambda: ShowFrame(frame.destroy(), MainPage('ISBN'))
         SearchEntry.bind('<KeyPress>', lambda *args: SearchBtCmd(BookName=SearchEntry.get()))
     else:
         SearchLbl['text']="Enter the ISBN: "
         SearchBt['command']=lambda *args: SearchBtCmd(ISBN=SearchEntry.get())
-        ChgSearchBt['command'] = lambda: ShowFrame(frame, MainPage('BookName'))
+        ChgSearchBt['command'] = lambda: ShowFrame(frame.destroy(), MainPage('BookName'))
         SearchEntry.bind('<KeyPress>', lambda *args: SearchBtCmd(ISBN=SearchEntry.get()))
 
     #button frame
@@ -77,27 +90,30 @@ def MainPage(Criteria='BookName'):
 
 
     #styling
-    FontStyle = ("Arial narrow", 21)
+    FontStyle = ("Lato", 21)
     FontStyle1 = ("halvetica", 21, "bold")
-    fgColor = "midnight blue"
     bgColor = "#FFB067"
     frame.config(height=1000, width=1000,bd=10, relief='groove',bg=bgColor, fg="black", font=FontStyle1)
-    SearchEntry.config(font=FontStyle)
+    SearchEntry.config(font=("Lato", 21, "bold"))
     SearchLbl.config(font=FontStyle, bg=bgColor)
-    BookLiBox.config(relief='sunken',width=55)
+    BookLiBox.config(relief='sunken',width=55, font=("Lato", 12))
 
     #button styling
     BtnBgColor="#FF8300"
-    AddBookBtn.config(bg=BtnBgColor, width=20)
-    RegisterBtn.config( bg=BtnBgColor, width=20)
-    ChgSearchBt.config(bg=BtnBgColor, width=20)
-    BorrowBtn.config(bg=BtnBgColor,width=10)
-    ReturnBtn.config(bg=BtnBgColor,width=10)
-    EditBtn.config(bg=BtnBgColor,width=10)
-    SearchBt.config(bg=BtnBgColor,width=10)
+    BtnFontStyle = ("Lato", 16)
+    AddBookBtn.config(bg=BtnBgColor, width=20, font=BtnFontStyle)
+    RegisterBtn.config(bg=BtnBgColor, width=20, font=BtnFontStyle)
+    ChgSearchBt.config(bg=BtnBgColor, width=20, font=BtnFontStyle)
+    BorrowBtn.config(bg=BtnBgColor,width=10, font=BtnFontStyle)
+    ReturnBtn.config(bg=BtnBgColor,width=10, font=BtnFontStyle)
+    EditBtn.config(bg=BtnBgColor,width=10, font=BtnFontStyle)
+    SearchBt.config(bg=BtnBgColor,width=10, font=BtnFontStyle)
+    BookInfoFrame = AutoResizeConfig(BookInfoFrame)
+    for child in BookInfoFrame.winfo_children():
+        child.config(font=BtnFontStyle)
 
     #positioning
-    frame.grid(padx=400, pady=250)
+    frame.grid()
     SearchLbl.grid(row=0)
     SearchEntry.grid(row=0, column=1, padx=5)
     BookLiBox.grid(row=1)
@@ -110,10 +126,12 @@ def MainPage(Criteria='BookName'):
     ChgSearchBt.grid(column=0, row=2)
     RegisterBtn.grid(column=0, row=3)
     AddBookBtn.grid(column=0, row=4)
+    frame=AutoResizeConfig(frame)
+
 
 def BorrowBookPage(ISBN=None, BookName=None):
     frame = LabelFrame(window, text='BORROW\n')
-    frame.grid(padx=400, pady=250)
+    frame.grid()
     BookLabel = Label(frame, text='Book ID: ')
     ISBNLbl = Label(frame, text='Book Name: ')
     BackBtn = Button(frame, text='Back', command=lambda: ShowFrame(frame, MainPage))
@@ -145,7 +163,7 @@ def BorrowBookPage(ISBN=None, BookName=None):
     ICLbl = Label(frame, text="IC: ")
 
     #styling
-    FontStyle = ("Arial Narrow", 21)
+    FontStyle = ("Lato", 21)
     FontStyle1 = ("halvetica", 21, "bold")
     fgColor = "black"
     bgColor = "#FFB067"
@@ -157,8 +175,8 @@ def BorrowBookPage(ISBN=None, BookName=None):
     ISBNEntry.config(font=FontStyle)
     BookNameEntry.config(fg=fgColor, font=FontStyle)
     BorrowerICEntry.config(font=FontStyle)
-    BorrowBtn.config(bg=BtnBgColor, width=10)
-    BackBtn.config(bg=BtnBgColor, width=10)
+    BorrowBtn.config(bg=BtnBgColor, width=10, font=("Lato",16))
+    BackBtn.config(bg=BtnBgColor, width=10, font=("Lato",16))
 
     #postioning
     BookLabel.grid(column=0, row=0)
@@ -175,6 +193,7 @@ def BorrowBookPage(ISBN=None, BookName=None):
     elif IsBookAvailable(BookName, ISBN) == False:
         messagebox.showinfo(message="The Book is not available for borrowing")
         ShowFrame(frame, MainPage)
+    frame=AutoResizeConfig(frame)
 
 def GetBookInfoFrame(parent, ISBNVar, BookNameVar, StatusVar):
     frame = LabelFrame(parent)
@@ -187,7 +206,7 @@ def GetBookInfoFrame(parent, ISBNVar, BookNameVar, StatusVar):
     return frame
 
 def ReturnBookPage(instance=None):
-    FontStyle = ("Arial Narrow", 21)
+    FontStyle = ("Lato", 21)
     FontStyle1 = ("halvetica", 21, "bold")
     fgColor = "black"
     bgColor = "#FFB067"
@@ -195,13 +214,13 @@ def ReturnBookPage(instance=None):
     frame = LabelFrame(window, text='RETURN\n', height=1000, width=1000,
                        bd=10, relief='groove',
                        bg=bgColor, fg=fgColor, font=FontStyle1)
-    frame.grid(padx=400, pady=250)
+    frame.grid()
 
     BookNameLbl = Label(frame, text='Book Name:', fg=fgColor, bg=bgColor, font=FontStyle)
     ISBNLbl = Label(frame, text='ISBN:', fg=fgColor, bg=bgColor, font=FontStyle)
     DateLbl = Label(frame, text=" Return Date :", bg=bgColor, font=FontStyle)
     ISBNSearchLbl = Label(frame, text='ISBN Search: ', fg=fgColor, bg=bgColor, font=FontStyle)
-    cal = Calendar(frame, selectmode='day',
+    calendar = Calendar(frame, selectmode='day',
                    year=datetime.date.today().year, month=datetime.date.today().month,
                    day=datetime.date.today().day)
     ISBNVar = StringVar()
@@ -225,7 +244,7 @@ def ReturnBookPage(instance=None):
         else:
             BookRes = SearchBook(ISBN=ISBN, ExactMatch=True)
             BorrowingDate = datetime.datetime.strptime(BookRes['BorrowingDate'], '%Y-%m-%d')
-            ReturnDate = datetime.datetime.strptime(cal.get_date(),'%m/%d/%y')
+            ReturnDate = datetime.datetime.strptime(calendar.get_date(),'%m/%d/%y')
             datediff =ReturnDate-BorrowingDate
             dayUnit = datetime.timedelta(days=1)
             if datediff> dayUnit*7:
@@ -241,24 +260,25 @@ def ReturnBookPage(instance=None):
         BookNameLbl['text']=f"Book Name: {instance['BookName']}"
         ISBNLbl['text']=f"ISBN: {instance['ISBN']}"
         ISBNSearchEntry.insert(0, instance['ISBN'])
+    frame=AutoResizeConfig(frame)
     BookNameLbl.grid(column=0, row=0)
     ISBNLbl.grid(column=0, row=1)
     ISBNSearchLbl.grid(column=0, row=2)
-    ISBNSearchEntry.grid(row=2, column=1, padx=25)
+    ISBNSearchEntry.grid(row=2, column=1)
     DateLbl.grid(row=3,column=0)
-    cal.grid(row=3,column=1, padx=20, pady=4)
-    Button(frame, text='Back', bg="#FF8300",width=10, command=lambda: ShowFrame(frame, MainPage)).grid(column=0)
-    Button(frame, text='Return', bg="#FF8300", width=10, command=Return).grid(column=1, row=4)
+    calendar.grid(row=3,column=1)
+    Button(frame, text='Back', bg="#FF8300",width=10, font=("Lato", 16), command=lambda: ShowFrame(frame, MainPage)).grid(column=0)
+    Button(frame, text='Return', bg="#FF8300", width=10, font=("Lato", 16), command=Return).grid(column=1, row=4)
 
 def RegisterUserPage():
-    FontStyle = ("Arial Narrow", 24)
+    FontStyle = ("Lato", 24)
     FontStyle1 = ("halvetica", 21, "bold")
     fgColor = "black"
     bgColor = "#FFB067"
-    frame = LabelFrame(window, text='REGISTRATION', height=1000, width=1000,
+    frame = LabelFrame(window, text='REGISTRATION',
                        bd=10, relief='groove',
                        bg=bgColor, fg=fgColor, font=FontStyle1)
-    frame.grid(padx=400, pady=250)
+    frame.grid()
 
     def GetEntryInfo():
         IC=ICEntry.get()
@@ -273,15 +293,15 @@ def RegisterUserPage():
     RegBtn = Button(frame, text='Register',bg=bgColor, command=GetEntryInfo)
     BackBtn = Button(frame, text='Back', command=lambda: ShowFrame(frame, MainPage))
 
-    RegBtn.config(bg="#FF8300", width=10)
+    RegBtn.config(bg="#FF8300", width=10,font=("Lato", 16))
     NameLabel = Label(frame, text="Name :", fg=fgColor, bg=bgColor, font=FontStyle)
     ICLabel = Label(frame, text="IC No. :", fg=fgColor, bg=bgColor, font=FontStyle)
     EmailLabel = Label(frame, text="Email :", fg=fgColor, bg=bgColor, font=FontStyle)
     NameEntry = Entry(frame, font=FontStyle)
     ICEntry = Entry(frame, font=FontStyle)
     EmailEntry = Entry(frame, font=FontStyle)
-    BackBtn.config(bg="#FF8300", width=10)
-
+    BackBtn.config(bg="#FF8300", width=10,font=("Lato", 16))
+    frame = AutoResizeConfig(frame)
     #positioning
     NameLabel.grid(row=0, column=0)
     NameEntry.grid(row=0, column=1, padx=50)
@@ -292,9 +312,10 @@ def RegisterUserPage():
     RegBtn.grid(row=3, column=1, padx=50)
     BackBtn.grid(row=3, column=0)
 
+
 #if instance is None, then it is a adding new book page
 def AddNewBook(instance=None):
-    FontStyle = ("Arial Narrow", 21)
+    FontStyle = ("Lato", 21)
     FontStyle1 = ("halvetica", 21, "bold")
     fgColor = "black"
     bgColor = "#FFB067"
@@ -303,13 +324,13 @@ def AddNewBook(instance=None):
                        bg=bgColor, fg=fgColor, font=FontStyle1)
     if instance is not None:
         frame['text']='EDIT BOOK'
-    frame.grid(padx=400, pady=250)
+    frame.grid()
     # initialise widgets
     BookNameLabel = Label(frame, text="Book Name :", font=FontStyle)
     ISBNLabel = Label(frame, text="ISBN:",font=FontStyle)
     BookNameEntry = Entry(frame)
     ISBNEntry = Entry(frame)
-    StatusBox = ttk.Combobox(frame, values=('Normal', 'Restricted'))
+    StatusBox = ttk.Combobox(frame, values=('Normal', 'Restricted'), font=("Lato", 14))
     StatusBox.state(["readonly"])
     BackBtn = Button(frame, text='Back',bg="#FF8300", command=lambda: ShowFrame(frame, MainPage))
 
@@ -333,8 +354,8 @@ def AddNewBook(instance=None):
         AddBtn['text'] = "Edit"
 
     #styling the widgets
-    AddBtn.config(bg="#FF8300", width=10)
-    BackBtn.config(bg="#FF8300", width=10)
+    AddBtn.config(bg="#FF8300", width=10,font=("Lato", 16))
+    BackBtn.config(bg="#FF8300", width=10,font=("Lato", 16))
     BookNameLabel.config(fg=fgColor, bg=bgColor, font=FontStyle)
     ISBNLabel.config(fg=fgColor, bg=bgColor, font=FontStyle)
     BookNameEntry.config(font=FontStyle)
@@ -345,8 +366,9 @@ def AddNewBook(instance=None):
     ISBNLabel.grid(row=1, column=0)
     ISBNEntry.grid(row=1, column=1)
     StatusBox.grid(row=2)
-    BackBtn.grid()
-    AddBtn.grid()
+    BackBtn.grid(row=3, column=0)
+    AddBtn.grid(row=3,column=1)
+    frame = AutoResizeConfig(frame)
 
 def EditBookPage(instance=None):
     if instance is None:
