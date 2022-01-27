@@ -2,6 +2,8 @@ import sqlite3 as sql
 from datetime import date
 
 DBName = 'Library Database.db'
+
+
 def LibraryDBInit():
     con = sql.connect(DBName)
     cursor = con.cursor()
@@ -45,16 +47,16 @@ def LibraryAppInit():
     AddUser('010814062399', 'Aizat Amirul Bin Zakir', 'Aizatte34@gmail.com')
     AddUser('099319044380', 'Aezul Bin Mat Zin', 'Aus695@gmail.com')
     AddUser('010709637876', 'Aiman Nabilah Binti Said', 'Aizatte34@gmail.com')
-    AddBook('9781603090254', 'Alec: The Years Have Pants', 'Available')
-    AddBook('9781603094955', 'Better Place', 'Available')
-    AddBook('1735322342', 'Dont Close Your Eyes', 'Available')
-    AddBook('0346148936', 'Complicated Moonlight', 'Available')
-    AddBook('1400096898', 'Memoirs of a Geisha', 'Available')
-    AddBook('0399155341', 'The Help', 'Available')
-    AddBook('0316166685', 'The Lovely Bones', 'Available')
-    AddBook('1594633665', 'The Girl on the Train', 'Available')
+    AddBook('9781603090254', 'Alec: The Years Have Pants', 'Normal')
+    AddBook('9781603094955', 'Better Place', 'Normal')
+    AddBook('1735322342', 'Dont Close Your Eyes', 'Normal')
+    AddBook('0346148936', 'Complicated Moonlight', 'Normal')
+    AddBook('1400096898', 'Memoirs of a Geisha', 'Normal')
+    AddBook('0399155341', 'The Help', 'Normal')
+    AddBook('0316166685', 'The Lovely Bones', 'Normal')
+    AddBook('1594633665', 'The Girl on the Train', 'Normal')
     AddBook('0063093575', 'The Girl with the Dragon Tattoo', 'Restricted')
-    AddBook('0385547129', 'Murder Under Her Skin', 'Available')
+    AddBook('0385547129', 'Murder Under Her Skin', 'Normal')
     AddBook('1496736249', 'The Spanish Daughter', 'Restricted')
     AddBook('666666666666', 'Tales of The Strongest Cirno', 'Restricted')
 
@@ -230,6 +232,7 @@ def IsBookAvailable(BookName=None, ISBN=None):
         return False
     return temp['IC'] == "LIBRARY_IC" and temp['Status'] != 'Restricted'
 
+
 def GetBookStatus(BookName=None, ISBN=None):
     temp = SearchBook(BookName, ISBN, ExactMatch=True)
     if temp is None:
@@ -240,6 +243,7 @@ def GetBookStatus(BookName=None, ISBN=None):
         return "Available for borrowing"
     else:
         return "No Available"
+
 
 def GetUserBorrowedBook(Name=None, IC=None):
     user = SearchUser(Name, IC)
@@ -308,7 +312,7 @@ def DeleteBook(ISBN):
     con.close()
 
 
-def BorrowBook(ISBN, IC,  Date=date.today()):
+def BorrowBook(ISBN, IC, Date=date.today()):
     con = sql.connect(DBName)
     con.execute("PRAGMA foreign_keys = 1")
     cursor = con.cursor()
@@ -329,4 +333,4 @@ def BorrowBook(ISBN, IC,  Date=date.today()):
 
 
 def ReturnBook(ISBN, Date=None):
-    return BorrowBook(ISBN,"LIBRARY_IC")
+    return BorrowBook(ISBN, "LIBRARY_IC")
