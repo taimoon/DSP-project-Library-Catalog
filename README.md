@@ -4,3 +4,5 @@ Group members:
 - Hafiz Asyraaf
 - Shafiq
 - Rosazwan
+
+Library App.py  is the main python file. The Library App is an app that record the flow of book.
